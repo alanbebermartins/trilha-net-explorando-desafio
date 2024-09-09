@@ -15,17 +15,19 @@ namespace DesafioProjetoHospedagem.Models
 
         public void CadastrarHospedes(List<Pessoa> hospedes)
         {
-            // TODO: Verificar se a capacidade é maior ou igual ao número de hóspedes sendo recebido
-            // *IMPLEMENTE AQUI*
-            if (true)
+            // *IMPLEMENTADO*
+            if (Suite == null)
             {
-                Hospedes = hospedes;
+                throw new InvalidOperationException("A suíte deve ser cadastrada antes de adicionar hóspedes.");
             }
-            else
+            
+            if (Suite.Capacidade < hospedes.Count)
             {
-                // TODO: Retornar uma exception caso a capacidade seja menor que o número de hóspedes recebido
-                // *IMPLEMENTE AQUI*
+                throw new InvalidOperationException($"A quantidade de hóspedes ({hospedes.Count}) não pode ser maior que a capacidade da suíte ({Suite.Capacidade}).");
             }
+            
+            Hospedes = hospedes;
+            Console.WriteLine("Reserva efetuada com sucesso!");
         }
 
         public void CadastrarSuite(Suite suite)
@@ -35,31 +37,27 @@ namespace DesafioProjetoHospedagem.Models
 
         public int ObterQuantidadeHospedes()
         {
-            // TODO: Retorna a quantidade de hóspedes (propriedade Hospedes)
-            // *IMPLEMENTE AQUI*
-            return 0;
+            // *IMPLEMENTADO*
+            return Hospedes.Count;
         }
 
         public decimal CalcularValorDiaria()
         {
-            decimal valor = 0M;
+            decimal valorDiaria = Suite.ValorDiaria;
+            decimal valorTotal;
 
             // *IMPLEMENTADO*
-            if (DiasReservados >= 10)
+             if (DiasReservados >= 10)
             {
-                Suite.ValorDiaria = Suite.ValorDiaria * 0.9;
-                valor = (DiasReservados * Suite.ValorDiaria);
-
-                Console.WriteLine($"O valor da diária com desconto fica em: {Suite.ValorDiaria:C}");
-                Console.WriteLine($"O valor total é de: {valor:C}");
-            } else {
-                valor = (DiasReservados * Suite.ValorDiaria);
-
-                Console.WriteLine($"O valor da diária é de: {Suite.ValorDiaria:C}");
-                Console.WriteLine($"O valor total é de: {valor:C}");
+                valorDiaria *= 0.9M; // Aplicar o desconto de 10%
             }
 
-            return valor;
+            valorTotal = DiasReservados * valorDiaria;
+
+            Console.WriteLine($"O valor da diária é de: {valorDiaria:C}");
+            Console.WriteLine($"O valor total é de: {valorTotal:C}");
+
+            return valorDiaria;
         }
     }
 }
